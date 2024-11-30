@@ -1,0 +1,33 @@
+@app.route('/')
+def index():
+    try:
+        table_expenses = dynamodb.Table(table_expenses_name)
+        table_income = dynamodb.Table(table_income_name)
+        table_budget = dynamodb.Table(table_budget_name)
+        
+        # Fetching data from Expenses, Income, and Budget tables
+        expense_response = table_expenses.scan()
+        income_response = table_income.scan()
+        budget_response = table_budget.scan()
+        
+        expenses = expense_response.get('Items', [])
+        incomes = income_response.get('Items', [])
+        budgets = budget_response.get('Items', [])
+        
+        # Calculate total expenses and income
+        total_expenses = sum(float(exp['amount']) for exp in expenses)
+        total_income = sum(float(inc['amount']) for inc in incomes)
+        balance = total_income - total_expenses
+
+        # Get the budget limit and ID (if set)
+        total_budget = float(budgets[0]['amount']) if budgets else 0
+        budget_id = budgets[0]['id'] if budgets else None
+        budget_exceeded = total_expenses > total_budget if total_budget else False
+
+        return render_template('dashboard.html', expenses=expenses, incomes=incomes, balance=balance,
+                               total_budget=total_budget, budget_id=budget_id, budget_exceeded=budget_exceeded)
+
+    except ClientError as e:
+        error_message = f"Error fetching data from DynamoDB: {e.response['Error']['Message']}"
+        print(error_message)
+        return error_message

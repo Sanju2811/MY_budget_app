@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <style>
+        .dashboard-header {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .card {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        .balance-section {
+            text-align: center;
+            margin: 30px 0;
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .balance-section h3 {
+            margin-bottom: 10px;
+        }
+        .balance-section p {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #28a745;
+        }
+        .action-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .btn-custom {
+            width: 180px;
+            font-size: 1rem;
+            padding: 10px 20px;
+            border-radius: 8px;
+        }
+        .table-section {
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Dashboard Header -->
+        <div class="dashboard-header">
+            <h1>Dashboard</h1>
+        </div>
+
+        <!-- Budget Alert -->
+        {% if budget_exceeded %}
+        <div class="alert alert-danger text-center">
+            <strong>Warning!</strong> Your expenses have exceeded the budget limit of ${{ budget_limit }}.
+        </div>
+        {% else %}
+        <div class="alert alert-success text-center">
+            <strong>Good Job!</strong> You are within the budget.
+        </div>
+        {% endif %}
+
+        <!-- Balance Section -->
+        <div class="balance-section">
+            <h3>Current Balances</h3>
+            <p><strong>Total Income:</strong> ${{ total_income }}</p>
+            <p><strong>Total Expenses:</strong> ${{ total_expenses }}</p>
+            <p><strong>Net Balance:</strong> ${{ balance }}</p>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <a href="{{ url_for('set_budget') }}" class="btn btn-primary btn-custom">Set/Update Budget</a>
+            <a href="{{ url_for('add_expense') }}" class="btn btn-success btn-custom">Add Expense</a>
+            <a href="{{ url_for('add_income') }}" class="btn btn-info btn-custom">Add Income</a>
+            <a href="{{ url_for('generate_report') }}" class="btn btn-warning btn-custom">Generate Report</a>
+            <a href="{{ url_for('logout') }}" class="btn btn-danger btn-custom">Logout</a>
+        </div>
+
+        <!-- Income and Expense Tables -->
+        <div class="table-section">
+            <!-- Expenses Table -->
+            <h3>Expenses</h3>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Amount</th>
+                            <th>Category</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for expense in expenses %}
+                        <tr>
+                            <td>{{ expense.id }}</td>
+                            <td>{{ expense.name }}</td>
+                            <td>${{ expense.amount }}</td>
+                            <td>{{ expense.category }}</td>
+                            <td>
+                                <a href="{{ url_for('edit_expense', expense_id=expense.id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                <a href="{{ url_for('delete_expense', expense_id=expense.id) }}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this expense?')">Delete</a>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="5">No expenses recorded.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Income Table -->
+            <h3>Income</h3>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Amount</th>
+                            <th>Category</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for income in incomes %}
+                        <tr>
+                            <td>{{ income.id }}</td>
+                            <td>{{ income.name }}</td>
+                            <td>${{ income.amount }}</td>
+                            <td>{{ income.category }}</td>
+                            <td>
+                                <a href="{{ url_for('edit_income', income_id=income.id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                <a href="{{ url_for('delete_income', income_id=income.id) }}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this income?')">Delete</a>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="5">No income recorded.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

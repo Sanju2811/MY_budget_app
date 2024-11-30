@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Income</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Income List</h1>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Amount</th>
+            <th>Category</th>
+        </tr>
+        {% for income in incomes %}
+        <tr>
+            <td>{{ income.id }}</td>
+            <td>{{ income.name }}</td>
+            <td>{{ income.amount }}</td>
+            <td>{{ income.category }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Set Budget Limit</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0-alpha1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>Set Monthly Budget Limit</h1>
+        
+        <!-- Form to Set Budget -->
+        <form method="POST" action="{{ url_for('set_budget') }}">
+            <div class="mb-3">
+                <label for="budget_limit" class="form-label">Enter Your Budget Limit:</label>
+                <input type="number" class="form-control" id="budget_limit" name="budget_limit" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Set Budget</button>
+        </form>
+
+        <br>
+        <a href="{{ url_for('index') }}" class="btn btn-secondary">Back to Dashboard</a>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0-alpha1/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

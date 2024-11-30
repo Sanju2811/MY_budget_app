@@ -1,0 +1,41 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Resources:
+  BudgetTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: BudgetTable
+      AttributeDefinitions:
+      - AttributeName: ExpenseId
+        AttributeType: S
+      KeySchema:
+      - AttributeName: ExpenseId
+        KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+  AddExpenseFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: add_expense.handler
+      Runtime: python3.13
+      CodeUri: AddExpenseFunction
+      MemorySize: 128
+      Timeout: 10
+      Environment:
+        Variables:
+          DYNAMODB_TABLE:
+            Ref: BudgetTable
+    Metadata:
+      SamResourceId: AddExpenseFunction
+Outputs:
+  AddExpenseFunctionArn:
+    Description: Add Expense Function ARN
+    Value:
+      Fn::GetAtt:
+      - AddExpenseFunction
+      - Arn
+  BudgetTableName:
+    Description: The name of the DynamoDB Table
+    Value:
+      Ref: BudgetTable

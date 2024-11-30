@@ -1,0 +1,32 @@
+version = 0.1
+[default]
+stack_name = "budget-app-2811-bfb2570b"
+s3_bucket = "jhdasfghjdbshbrwuerbh"
+capabilities = "CAPABILITY_IAM"
+region = "us-east-1"
+confirm_changes = "y"
+allow_sam_role_creation = "Y"
+disable_rollback = "y"
+save_arguments_to_config = "Y"
+sam_configuration_file = "samconfig.toml"
+sam_configuration_environment = "my_budget_app"
+
+[my_budget_ap.deploy.parameters]
+stack_name = "budget-app-2811-bfb2570b"
+resolve_s3 = true
+s3_prefix = "budget-app-2811-bfb2570b"
+region = "us-east-1"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
+disable_rollback = true
+image_repositories = []
+
+[my_budget_app.deploy.parameters]
+stack_name = "budget-app-2811"
+resolve_s3 = true
+s3_prefix = "budget-app-2811"
+region = "us-east-1"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
+disable_rollback = true
+image_repositories = []

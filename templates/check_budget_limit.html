@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check Budget Limit</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f4f6f9;
+        }
+        .btn-custom {
+            background-color: #007bff;
+            color: white;
+        }
+        .btn-custom:hover {
+            background-color: #0056b3;
+            color: white;
+        }
+        h1 {
+            color: #007bff;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>Budget Limit Status</h1>
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Your Current Budget Limit</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Budget Limit: ${{ budget_limit }}</strong></p>
+                <p><strong>Total Expenses: ${{ total_expenses }}</strong></p>
+                <p><strong>Remaining Budget: ${{ remaining_budget }}</strong></p>
+                {% if remaining_budget < 0 %}
+                    <div class="alert alert-danger mt-3">
+                        <strong>Warning!</strong> You have exceeded your budget limit.
+                    </div>
+                {% else %}
+                    <div class="alert alert-success mt-3">
+                        <strong>Good Job!</strong> You are within your budget limit.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="btn-container mt-4">
+            <a href="{{ url_for('dashboard') }}" class="btn btn-custom">Back to Dashboard</a>
+        </div>
+    </div>
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
