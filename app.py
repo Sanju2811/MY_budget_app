@@ -4,7 +4,8 @@ from flask import Flask, render_template, request, redirect, url_for, flash, sen
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user
 import boto3
 from botocore.exceptions import ClientError
-from docx import Document  
+from docx import Document
+ 
 
 region_name = 'us-east-1'  
 s3_bucket_name = 'jhdasfghjdbshbrwuerbhwehbgt'  
@@ -45,45 +46,6 @@ def check_budget_limit(expenses, budget_limit):
         print("Error: AWS credentials not found")
     except Exception as e:
         print(f"Error occurred while checking budget limit or sending SNS: {str(e)}")
-
-# @app.route('/add_expense', methods=['GET', 'POST'])
-def add_expense():
-    if request.method == 'POST':
-        expense_id = request.form['id']
-        expense_name = request.form['name']
-        expense_amount = Decimal(request.form['amount'])
-        expense_category = request.form['category']
-        
-        table_expenses = dynamodb.Table(table_expenses_name)
-        table_expenses.put_item(
-            Item={
-                'id': expense_id,
-                'name': expense_name,
-                'amount': expense_amount,
-                'category': expense_category
-            }
-        )
-        
-        expense_data = {
-            'id': expense_id,
-            'name': expense_name,
-            'amount': str(expense_amount),  
-            'category': expense_category
-        }
-
-        send_expense_to_sqs(expense_data)
-        
-        expenses = fetch_all_expenses()  
-
-        budget_limit = 100000
-        
-        check_budget_limit(expenses, budget_limit)
-        
-        flash('Expense added successfully!', 'success')
-        return redirect(url_for('index'))
-    
-    return render_template('add_expense.html')
-
 
 def send_expense_to_sqs(expense_data):
     try:
